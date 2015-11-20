@@ -1,7 +1,7 @@
 package assign3.weather;
 
 import android.app.ProgressDialog;
-import android.content.Context;
+
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,12 +24,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Cache;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
@@ -38,6 +37,9 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -202,15 +204,45 @@ public class MainActivity extends AppCompatActivity {
             TextView tempView = (TextView) rootView.findViewById(R.id.temp);
             TextView conditionView = (TextView) rootView.findViewById(R.id.section_label);
             String city=getArguments().getString(CITY_NAME);
-            makeJsonObjectRequest(city,tempView,icon,conditionView);
+            String urlJsonObj="http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=2de143494c0b295cca9337e1e96b00e0&units=metric";
+            RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+            /*
+            Check cache
+             */
+            Cache cache= requestQueue.getCache();
+            Cache.Entry entry = cache.get(urlJsonObj);
+            if(isInternetAvailable()){
+                cache.clear();
+            }
+            //cache.invalidate(urlJsonObj,true);
+            if(entry!=null){
+                try {
+                    String data = new String(entry.data, "UTF-8");
+                    Log.d("CACHE DATA", data);
+                    JSONObject jsonObject=new JSONObject(data);
+                    setData(jsonObject,tempView,icon,conditionView);
+
+                }
+                catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            else{
+                // Cache data not exist.
+                makeJsonObjectRequest(requestQueue, urlJsonObj, tempView, icon, conditionView);
+            }
+
+
             //tempView.setText(getArguments().getString(CITY_NAME));
             return rootView;
         }
 
-        private void makeJsonObjectRequest(String city, final TextView tempView,final ImageView icon, final TextView conditionView) {
+        private void makeJsonObjectRequest(RequestQueue requestQueue, String urlJsonObj, final TextView tempView,final ImageView icon, final TextView conditionView) {
             showpDialog();
 
-            String urlJsonObj="http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=2de143494c0b295cca9337e1e96b00e0&units=metric";
             JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                     urlJsonObj, null, new Response.Listener<JSONObject>() {
 
@@ -218,28 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(JSONObject response) {
                     Log.d(TAG, response.toString());
 
-                    try {
-                        // Parsing json object response
-                        // response will be a json object
-                        JSONObject main = response.getJSONObject("main");
-                        String temp = main.getString("temp");
-                        String pressure = main.getString("pressure");
-                        JSONArray weather= response.getJSONArray("weather");
-                        String weatherDescription=weather.getJSONObject(0).getString("main");
-                        String weatherIcon="http://openweathermap.org/img/w/"+weather.getJSONObject(0).getString("icon")+".png";
-                        Picasso.with(getActivity().getApplicationContext()).load(weatherIcon).into(icon);
-                        //tempView.setText(Html.fromHtml(temp+"<sup><small>0</small></sup>C"));
-                        tempView.setText(temp+"\u00baC");
-                        conditionView.setText(weatherDescription);
-
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                   Toast.makeText(getActivity().getApplicationContext(),
-                            "Error: " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                    }
+                    setData(response,tempView,icon,conditionView);
                     hidepDialog();
 
                 }
@@ -255,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-            RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+
             requestQueue.add(jsonObjReq);
             // Adding request to request queue
         }
@@ -267,6 +278,45 @@ public class MainActivity extends AppCompatActivity {
         private void hidepDialog() {
             if (pDialog.isShowing())
                 pDialog.dismiss();
+        }
+        private void setData(JSONObject response,final TextView tempView,final ImageView icon, final TextView conditionView){
+            try {
+                // Parsing json object response
+                // response will be a json object
+                JSONObject main = response.getJSONObject("main");
+                String temp = main.getString("temp");
+                String pressure = main.getString("pressure");
+                JSONArray weather= response.getJSONArray("weather");
+                String weatherDescription=weather.getJSONObject(0).getString("main");
+                String weatherIcon="http://openweathermap.org/img/w/"+weather.getJSONObject(0).getString("icon")+".png";
+                Picasso.with(getActivity().getApplicationContext()).load(weatherIcon).into(icon);
+                //tempView.setText(Html.fromHtml(temp+"<sup><small>0</small></sup>C"));
+                tempView.setText(temp+"\u00baC");
+                conditionView.setText(weatherDescription);
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity().getApplicationContext(),
+                        "Error: " + e.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+        public boolean isInternetAvailable() {
+            try {
+                InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
+
+                if (ipAddr.equals("")) {
+                    return false;
+                } else {
+                    return true;
+                }
+
+            } catch (Exception e) {
+                return false;
+            }
+
         }
     }
 
