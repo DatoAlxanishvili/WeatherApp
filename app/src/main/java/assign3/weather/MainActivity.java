@@ -2,9 +2,9 @@ package assign3.weather;
 
 import android.app.ProgressDialog;
 
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -32,6 +32,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.db.chart.Tools;
+import com.db.chart.model.LineSet;
+import com.db.chart.view.AxisController;
+import com.db.chart.view.ChartView;
+import com.db.chart.view.LineChartView;
+import com.db.chart.view.animation.Animation;
+import com.db.chart.view.animation.easing.BounceEase;
+
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -40,6 +48,11 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -78,14 +91,14 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+    /*    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
     }
 
@@ -140,13 +153,13 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "თბილისი";
+                    return "tbilisi";
                 case 1:
-                    return "ბათუმი";
+                    return "batumi";
                 case 2:
-                    return "ქუთაისი";
+                    return "kutaisi";
                 case 3:
-                    return "ზუგდიდი";
+                    return "zugdidi";
             }
             return null;
         }
@@ -203,6 +216,15 @@ public class MainActivity extends AppCompatActivity {
             ImageView icon=(ImageView) rootView.findViewById(R.id.weather_icon);
             TextView tempView = (TextView) rootView.findViewById(R.id.temp);
             TextView conditionView = (TextView) rootView.findViewById(R.id.section_label);
+            TextView pressureView=(TextView) rootView.findViewById(R.id.pressure);
+            TextView humidityView=(TextView) rootView.findViewById(R.id.humidity);
+            TextView windView=(TextView) rootView.findViewById(R.id.wind_speed);
+            TextView sunriseView=(TextView) rootView.findViewById(R.id.sunrise);
+            TextView sunsetView=(TextView) rootView.findViewById(R.id.sunset);
+            LineChartView chart= (LineChartView) rootView.findViewById(R.id.linechart);
+
+            plotWeather(chart);
+
             String city=getArguments().getString(CITY_NAME);
             String urlJsonObj="http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=2de143494c0b295cca9337e1e96b00e0&units=metric";
             RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
@@ -210,17 +232,19 @@ public class MainActivity extends AppCompatActivity {
             Check cache
              */
             Cache cache= requestQueue.getCache();
+            cache.invalidate(urlJsonObj,true);
             Cache.Entry entry = cache.get(urlJsonObj);
+
             if(isInternetAvailable()){
-                cache.clear();
+                entry=null;
             }
-            //cache.invalidate(urlJsonObj,true);
+
             if(entry!=null){
                 try {
                     String data = new String(entry.data, "UTF-8");
                     Log.d("CACHE DATA", data);
                     JSONObject jsonObject=new JSONObject(data);
-                    setData(jsonObject,tempView,icon,conditionView);
+                    setData(jsonObject,tempView,icon,conditionView,pressureView,humidityView,windView,sunriseView,sunsetView);
 
                 }
                 catch (UnsupportedEncodingException e) {
@@ -232,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 // Cache data not exist.
-                makeJsonObjectRequest(requestQueue, urlJsonObj, tempView, icon, conditionView);
+                makeJsonObjectRequest(requestQueue, urlJsonObj, tempView, icon, conditionView,pressureView,humidityView,windView,sunriseView,sunsetView);
             }
 
 
@@ -240,7 +264,16 @@ public class MainActivity extends AppCompatActivity {
             return rootView;
         }
 
-        private void makeJsonObjectRequest(RequestQueue requestQueue, String urlJsonObj, final TextView tempView,final ImageView icon, final TextView conditionView) {
+        private void makeJsonObjectRequest(RequestQueue requestQueue,
+                                           String urlJsonObj,
+                                           final TextView tempView,
+                                           final ImageView icon,
+                                           final TextView conditionView,
+                                           final TextView pressureView,
+                                           final TextView humidityView,
+                                           final TextView windView,
+                                           final TextView sunriseView,
+                                           final TextView sunsetView) {
             showpDialog();
 
             JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -250,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(JSONObject response) {
                     Log.d(TAG, response.toString());
 
-                    setData(response,tempView,icon,conditionView);
+                    setData(response,tempView,icon,conditionView,pressureView,humidityView,windView,sunriseView,sunsetView);
                     hidepDialog();
 
                 }
@@ -279,22 +312,39 @@ public class MainActivity extends AppCompatActivity {
             if (pDialog.isShowing())
                 pDialog.dismiss();
         }
-        private void setData(JSONObject response,final TextView tempView,final ImageView icon, final TextView conditionView){
+        private void setData(JSONObject response,
+                             final TextView tempView,
+                             final ImageView icon,
+                             final TextView conditionView,
+                             final TextView pressureView,
+                             final TextView humidityView,
+                             final TextView windView,
+                             final TextView sunriseView,
+                             final TextView sunsetView){
             try {
                 // Parsing json object response
                 // response will be a json object
                 JSONObject main = response.getJSONObject("main");
                 String temp = main.getString("temp");
                 String pressure = main.getString("pressure");
+                String humidity=main.getString("humidity");
+                JSONObject wind=response.getJSONObject("wind");
+                String windSpeed=wind.getString("speed");
+                JSONObject sys=response.getJSONObject("sys");
+                long sunrise=sys.getLong("sunrise");
+                long sunset=sys.getLong("sunset");
                 JSONArray weather= response.getJSONArray("weather");
-                String weatherDescription=weather.getJSONObject(0).getString("main");
+                String weatherDescription=weather.getJSONObject(0).getString("description");
                 String weatherIcon="http://openweathermap.org/img/w/"+weather.getJSONObject(0).getString("icon")+".png";
+                //setting views
                 Picasso.with(getActivity().getApplicationContext()).load(weatherIcon).into(icon);
-                //tempView.setText(Html.fromHtml(temp+"<sup><small>0</small></sup>C"));
-                tempView.setText(temp+"\u00baC");
+                tempView.setText(temp + "\u00baC");
                 conditionView.setText(weatherDescription);
-
-
+                pressureView.setText(pressure + " hpa");
+                humidityView.setText(humidity + "%");
+                windView.setText(windSpeed+" m/s");
+                sunriseView.setText(convertTime(sunrise));
+                sunsetView.setText(convertTime(sunset));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -318,6 +368,44 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+        public String convertTime(long time){
+
+            Date date = new Date(time*1000L); // *1000 is to convert seconds to milliseconds
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a"); // the format of your date
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT+4")); // give a timezone reference for formating (see comment at the bottom
+            return sdf.format(date);
+        }
+        public void plotWeather(LineChartView chart){
+            LineSet dataset = new LineSet();
+            dataset.addPoint("MON", 10);
+            dataset.addPoint("TUE", 15);
+            dataset.addPoint("WED", 5);
+            dataset.setColor(Color.WHITE)
+                    .setDotsStrokeThickness(Tools.fromDpToPx(2))
+                    .setDotsStrokeColor(Color.WHITE)
+                    .setDotsColor(Color.parseColor("#00B49E"))
+                    .setThickness(Tools.fromDpToPx(3));
+
+            Paint gridPaint = new Paint();
+            gridPaint.setColor(Color.parseColor("#5ec4b8"));
+            gridPaint.setStyle(Paint.Style.STROKE);
+            gridPaint.setAntiAlias(true);
+            gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
+            chart.setBorderSpacing(Tools.fromDpToPx(30))
+                    .setXLabels(AxisController.LabelPosition.OUTSIDE)
+                    .setLabelsColor(Color.WHITE)
+                    .setYLabels(AxisController.LabelPosition.OUTSIDE)
+                    .setLabelsFormat(new DecimalFormat("##'ºC'"))
+                    .setXAxis(false)
+                    .setYAxis(false)
+                    .setStep(5)
+                    .setGrid(ChartView.GridType.HORIZONTAL, gridPaint);
+
+            chart.addData(dataset);
+            Animation anim=new Animation().setEasing(new BounceEase());
+            chart.show(anim);
+        }
     }
+
 
 }
