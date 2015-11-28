@@ -1,4 +1,8 @@
-
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeToRefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -137,17 +141,10 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_below="@id/details_grid"
-        android:background="@drawable/layout_bg"
         android:layout_marginTop="20dp">
-        <com.db.chart.view.LineChartView
-            xmlns:chart="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/linechart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="20dp"
-            />
     </LinearLayout>
 
 
 
 </RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

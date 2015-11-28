@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +56,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity   {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -145,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // Show 4 total pages.
             return 4;
         }
 
@@ -210,33 +212,38 @@ public class MainActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            final SwipeRefreshLayout refreshLayout= (SwipeRefreshLayout) rootView.findViewById(R.id.swipeToRefresh);
+            refreshLayout.setColorSchemeColors(android.R.color.holo_green_dark,
+                    android.R.color.holo_red_dark,
+                    android.R.color.holo_blue_dark,
+                    android.R.color.holo_orange_dark);
             pDialog = new ProgressDialog(getContext());
             pDialog.setMessage("Please wait...");
             pDialog.setCancelable(false);
-            ImageView icon=(ImageView) rootView.findViewById(R.id.weather_icon);
-            TextView tempView = (TextView) rootView.findViewById(R.id.temp);
-            TextView conditionView = (TextView) rootView.findViewById(R.id.section_label);
-            TextView pressureView=(TextView) rootView.findViewById(R.id.pressure);
-            TextView humidityView=(TextView) rootView.findViewById(R.id.humidity);
-            TextView windView=(TextView) rootView.findViewById(R.id.wind_speed);
-            TextView sunriseView=(TextView) rootView.findViewById(R.id.sunrise);
-            TextView sunsetView=(TextView) rootView.findViewById(R.id.sunset);
-            LineChartView chart= (LineChartView) rootView.findViewById(R.id.linechart);
+            final ImageView icon=(ImageView) rootView.findViewById(R.id.weather_icon);
+            final TextView tempView = (TextView) rootView.findViewById(R.id.temp);
+            final TextView conditionView = (TextView) rootView.findViewById(R.id.section_label);
+            final TextView pressureView=(TextView) rootView.findViewById(R.id.pressure);
+            final TextView humidityView=(TextView) rootView.findViewById(R.id.humidity);
+            final TextView windView=(TextView) rootView.findViewById(R.id.wind_speed);
+            final TextView sunriseView=(TextView) rootView.findViewById(R.id.sunrise);
+            final TextView sunsetView=(TextView) rootView.findViewById(R.id.sunset);
 
-            plotWeather(chart);
+
 
             String city=getArguments().getString(CITY_NAME);
-            String urlJsonObj="http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=2de143494c0b295cca9337e1e96b00e0&units=metric";
-            RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+            final String urlJsonObj="http://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=2de143494c0b295cca9337e1e96b00e0&units=metric";
+            final RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
             /*
             Check cache
              */
             Cache cache= requestQueue.getCache();
-            cache.invalidate(urlJsonObj,true);
+
             Cache.Entry entry = cache.get(urlJsonObj);
 
             if(isInternetAvailable()){
                 entry=null;
+                cache.invalidate(urlJsonObj,true);
             }
 
             if(entry!=null){
@@ -258,9 +265,14 @@ public class MainActivity extends AppCompatActivity {
                 // Cache data not exist.
                 makeJsonObjectRequest(requestQueue, urlJsonObj, tempView, icon, conditionView,pressureView,humidityView,windView,sunriseView,sunsetView);
             }
+            refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                public void onRefresh() {
+                    System.out.println("refresh");
+                    makeJsonObjectRequest(requestQueue, urlJsonObj, tempView, icon, conditionView,pressureView,humidityView,windView,sunriseView,sunsetView);
+                    refreshLayout.setRefreshing(false);
+                }
+            });
 
-
-            //tempView.setText(getArguments().getString(CITY_NAME));
             return rootView;
         }
 
@@ -293,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(TAG, "Error: " + error.getMessage());
                     Toast.makeText(getActivity().getApplicationContext(),
-                            error.getMessage(), Toast.LENGTH_SHORT).show();
+                            "საჭიროა ინტენეტთან კავშირი", Toast.LENGTH_SHORT).show();
                     // hide the progress dialog
                    hidepDialog();
 
@@ -375,36 +387,7 @@ public class MainActivity extends AppCompatActivity {
             sdf.setTimeZone(TimeZone.getTimeZone("GMT+4")); // give a timezone reference for formating (see comment at the bottom
             return sdf.format(date);
         }
-        public void plotWeather(LineChartView chart){
-            LineSet dataset = new LineSet();
-            dataset.addPoint("MON", 10);
-            dataset.addPoint("TUE", 15);
-            dataset.addPoint("WED", 5);
-            dataset.setColor(Color.WHITE)
-                    .setDotsStrokeThickness(Tools.fromDpToPx(2))
-                    .setDotsStrokeColor(Color.WHITE)
-                    .setDotsColor(Color.parseColor("#00B49E"))
-                    .setThickness(Tools.fromDpToPx(3));
 
-            Paint gridPaint = new Paint();
-            gridPaint.setColor(Color.parseColor("#5ec4b8"));
-            gridPaint.setStyle(Paint.Style.STROKE);
-            gridPaint.setAntiAlias(true);
-            gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
-            chart.setBorderSpacing(Tools.fromDpToPx(30))
-                    .setXLabels(AxisController.LabelPosition.OUTSIDE)
-                    .setLabelsColor(Color.WHITE)
-                    .setYLabels(AxisController.LabelPosition.OUTSIDE)
-                    .setLabelsFormat(new DecimalFormat("##'ºC'"))
-                    .setXAxis(false)
-                    .setYAxis(false)
-                    .setStep(5)
-                    .setGrid(ChartView.GridType.HORIZONTAL, gridPaint);
-
-            chart.addData(dataset);
-            Animation anim=new Animation().setEasing(new BounceEase());
-            chart.show(anim);
-        }
     }
 
 
