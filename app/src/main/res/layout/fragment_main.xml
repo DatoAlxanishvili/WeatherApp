@@ -9,139 +9,66 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="assign3.weather.MainActivity$PlaceholderFragment">
+    tools:context="assign3.weather.MainActivity$PlaceholderFragment"
+    android:background="@drawable/night"
+    >
 
-    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/temp_and_icon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:columnCount="2"
-        android:orientation="horizontal"
-        >
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            >
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:id="@+id/weather_icon"/>
-            <TextView android:id="@+id/section_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:layout_gravity="center_horizontal"
-                android:layout_below="@+id/temp_and_icon"
-                />
-        </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:id="@+id/temp"
-        android:textSize="40sp"
-        android:text="gegeg"
-        android:layout_gravity="center"
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/details_grid"
+       android:orientation="vertical">
+       <assign3.weather.customViews.DejaVUSansTextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/city"
+           android:textSize="26sp"
+           android:layout_marginTop="10dp"
+           android:layout_gravity="center_horizontal"
+           android:text="egeg"
+           />
+       <ImageView
+           android:layout_width="wrap_content"
+           android:layout_height="90dp"
+           android:id="@+id/weather_icon"
+           android:layout_gravity="center_horizontal"
+           android:src="@drawable/w03d"
+           android:layout_marginTop="10dp"
+           />
+       <assign3.weather.customViews.RobotoTextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/temp"
+           android:layout_gravity="center_horizontal"
+           android:textSize="65sp"
+           android:text="gege"
+           android:layout_marginTop="25dp"/>
+       <assign3.weather.customViews.DejaVUSansTextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/temp_description"
+           android:layout_gravity="center_horizontal"
+           android:text="gegege"
+           android:textSize="17sp"
+           android:layout_marginTop="5dp"/>
 
-       />
-        </GridLayout>
-
-        <View
-            android:layout_below="@+id/temp_and_icon"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
-        <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/details_grid"
-            android:layout_below="@+id/temp_and_icon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:columnCount="2"
-            android:orientation="horizontal"
-            >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:textSize="15sp"
-            android:text="Pressure:"
-            android:layout_gravity="right"
-            />
-        <TextView android:id="@+id/pressure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:textSize="15sp"
-            android:layout_gravity="center_horizontal"
-            android:text="gege"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="Humidity:"
-            android:layout_gravity="right"
-            />
-        <TextView android:id="@+id/humidity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:layout_gravity="center_horizontal"
-            android:text="gege"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="Wind Speed:"
-            android:layout_gravity="right"
-            />
-        <TextView android:id="@+id/wind_speed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:layout_gravity="center_horizontal"
-            android:text="gege"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="Sunrise:"
-            android:layout_gravity="right"
-            />
-        <TextView android:id="@+id/sunrise"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:layout_gravity="center_horizontal"
-            android:text="gege"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="Sunset:"
-            android:layout_gravity="right"
-            />
-        <TextView android:id="@+id/sunset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:layout_gravity="center_horizontal"
-            android:text="gege"
-            />
-</GridLayout>
+   </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/details_grid"
-        android:layout_marginTop="20dp">
+        android:id="@+id/calendar"
+        android:layout_marginTop="5dp"
+        android:paddingTop="17dp"
+        android:paddingBottom="17dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal"
+        android:divider="@drawable/divider"
+        android:dividerPadding="2.5dp"
+        android:showDividers="middle"
+        android:background="@drawable/layout_bg"
+        >
     </LinearLayout>
 
 

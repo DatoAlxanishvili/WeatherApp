@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#009380</color>
+    <color name="colorPrimary">#78909C</color>
     <color name="colorPrimaryDark">#00b49e</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#D6D790</color>
+    <color name="white">#e6e6e8</color>
+    <color name="drawerBackgrond">#CC647A82</color>
 </resources>
