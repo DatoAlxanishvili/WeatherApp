@@ -5,10 +5,6 @@ package assign3.weather.fragments;
  */
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.media.Image;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -30,19 +26,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -102,10 +93,6 @@ public class PlaceholderFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeToRefresh);
-        refreshLayout.setColorSchemeColors(android.R.color.holo_green_dark,
-                android.R.color.holo_red_dark,
-                android.R.color.holo_blue_dark,
-                android.R.color.holo_orange_dark);
         pDialog = new ProgressDialog(getContext(),R.style.ProgressDialogTheme);
         pDialog.setMessage("გთხოვთ დაელოდოთ...");
         pDialog.setCancelable(false);
@@ -130,13 +117,13 @@ public class PlaceholderFragment extends Fragment {
         Cache.Entry entry = cache.get(urlJsonObj);
         Cache.Entry entryWeekForecast = cache.get(urlJsonWeekForecast);
 
-        if (isInternetAvailable()) {
-            entry = null;
-            entryWeekForecast=null;
+       /* if (isInternetAvailable()) {
+            *//*entry = null;
+            entryWeekForecast=null;*//*
             cache.invalidate(urlJsonObj, true);
             cache.invalidate(urlJsonWeekForecast, true);
         }
-
+*/
         if (entry != null) {
             try {
                 String data = new String(entry.data, "UTF-8");

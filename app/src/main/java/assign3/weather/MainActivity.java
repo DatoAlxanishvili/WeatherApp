@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity   {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private String[] cityTitles={"თბილისი","ბათუმი","ქუთაისი","ზუგდიდი"};
+    private String[] cityTitles={"თბილისი","ბათუმი","ქუთაისი","თელავი"};
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerList;
@@ -129,13 +129,12 @@ public class MainActivity extends AppCompatActivity   {
                        bundle.putString("cityName",cityTitles[position]);
                        break;
                    case 3:
-                       bundle.putString("name", "zugdidi");
+                       bundle.putString("name", "telavi");
                        bundle.putString("cityName",cityTitles[position]);
                        break;
 
                }
                mSectionsPagerAdapter.notifyDataSetChanged();
-               //mViewPager.setAdapter(mSectionsPagerAdapter);
                //set Fragmentclass Arguments
 
            }
