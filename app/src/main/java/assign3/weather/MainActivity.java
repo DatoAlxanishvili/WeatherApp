@@ -1,6 +1,7 @@
 package assign3.weather;
 
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -25,6 +26,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import java.sql.SQLOutput;
+
 import assign3.weather.customViews.DejaVUSansTextView;
 import assign3.weather.fragments.PlaceholderFragment;
 import assign3.weather.fragments.TwelveDayFragment;
@@ -48,14 +51,19 @@ public class MainActivity extends AppCompatActivity   {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private String[] cityTitles={"თბილისი","ბათუმი","ქუთაისი","თელავი"};
+    private String[] cityTitles={"თბილისი","ბათუმი","ქუთაისი","თელავი","ზუგდიდი"};
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerList;
+    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context=this;
+
+        System.out.println("########### "+context.getResources().getIdentifier("w01d","drawable",context.getPackageName()));
+        System.out.println("###########* "+R.drawable.w01d);
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -132,8 +140,25 @@ public class MainActivity extends AppCompatActivity   {
                        bundle.putString("name", "telavi");
                        bundle.putString("cityName",cityTitles[position]);
                        break;
-
+                   case 4:
+                       bundle.putString("name", "zugdidi");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
                }
+               /*Thread thread = new Thread(new Runnable(){
+                   @Override
+                   public void run() {
+                       MainActivity.this.runOnUiThread(new Runnable() {
+
+                           @Override
+                           public void run() {
+                               mSectionsPagerAdapter.notifyDataSetChanged();
+                           }
+                       });
+                   }
+               });
+
+               thread.start();*/
                mSectionsPagerAdapter.notifyDataSetChanged();
                //set Fragmentclass Arguments
 
@@ -201,6 +226,7 @@ public class MainActivity extends AppCompatActivity   {
                     return mainFragment;
                 case 1:
                     TwelveDayFragment twelveDayFragment=new TwelveDayFragment();
+                    twelveDayFragment.setArguments(this.fragmentBundle);
                     return twelveDayFragment;
             }
            return null;
@@ -228,7 +254,10 @@ public class MainActivity extends AppCompatActivity   {
         }
     }
 
-
+    public static Context getContext()
+    {
+        return context;
+    }
 
 
 }

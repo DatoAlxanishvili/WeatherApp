@@ -5,6 +5,7 @@ package assign3.weather.fragments;
  */
 
 import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -129,6 +130,7 @@ public class PlaceholderFragment extends Fragment {
                 String data = new String(entry.data, "UTF-8");
                 String weekData=new String(entryWeekForecast.data, "UTF-8");
                 Log.d("CACHE DATA", data);
+
                 JSONObject jsonObject = new JSONObject(data);
                 JSONObject jsonObject1 =new JSONObject(weekData);
                 setData(jsonObject, tempView, icon, conditionView);
@@ -146,10 +148,11 @@ public class PlaceholderFragment extends Fragment {
         }
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             public void onRefresh() {
+               // refreshLayout.setRefreshing(true);
                 System.out.println("refresh");
                 makeJsonObjectRequest(requestQueue, urlJsonObj, tempView, icon, conditionView);
                 if(isInternetAvailable()){
-                weekWeatherView.removeAllViews();
+                    weekWeatherView.removeAllViews();
                     getWeekForecastJson(requestQueue, urlJsonWeekForecast, weekWeatherView);
                 }
 
@@ -309,7 +312,9 @@ public class PlaceholderFragment extends Fragment {
             temperature.setText(tempArray.get(i) + "º");
             temperatureMin.setText(tempMinArray.get(i) + "º");
             temperatureMin.setPadding(0,0,0,30);
-            weatherState.setImageResource(getResources().getIdentifier("w"+iconArray.get(i), "drawable", getActivity().getApplicationContext().getPackageName()));
+            Drawable dr=getResources().getDrawable(getResources().getIdentifier("sw"+iconArray.get(i), "drawable", getActivity().getApplicationContext().getPackageName()));
+            weatherState.setImageDrawable(dr);
+            //weatherState.setImageResource(R.drawable.w01d);
             TextView separator= new TextView(getActivity().getApplicationContext());
             separator.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
             separator.setBackgroundColor(getResources().getColor(R.color.white));

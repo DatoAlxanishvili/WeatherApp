@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="50dp">
+    <assign3.weather.customViews.RobotoTextView
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/date"
+        android:textSize="14sp"
+        android:layout_gravity="bottom"
+        android:text="01/12"
+        android:layout_weight="0.20"
+        android:paddingStart="5dp"
+
+        />
+    <assign3.weather.customViews.DejaVUSansTextView
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/weekDay"
+        android:textSize="17sp"
+        android:layout_gravity="bottom"
+        android:text="ორშაბათი"
+        android:layout_weight="0.5"
+        />
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/icon"
+        android:layout_gravity="bottom"
+        android:src="@drawable/sw01d"
+       android:layout_weight="1"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+
+      />
+    <assign3.weather.customViews.RobotoTextView
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/temp_max"
+        android:textSize="19sp"
+        android:layout_gravity="bottom"
+        android:text="12/"
+        />
+    <assign3.weather.customViews.RobotoTextView
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/temp_min"
+        android:textSize="19sp"
+        android:text="12"
+        android:layout_gravity="bottom"/>
+
+</LinearLayout>
+<View
+android:layout_width="match_parent"
+android:layout_height="0.2dp"
+android:background="@color/white" />
+</LinearLayout>
