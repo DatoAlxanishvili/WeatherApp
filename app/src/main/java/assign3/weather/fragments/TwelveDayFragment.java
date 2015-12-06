@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -44,10 +45,12 @@ public class TwelveDayFragment extends android.support.v4.app.Fragment {
     public TwelveDayFragment() {
     }
     RecyclerView listView;
+    RelativeLayout backgroundView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.twleve_day_fragment, container, false);
+        backgroundView= (RelativeLayout) rootView.findViewById(R.id.background_tab_two);
         listView = (RecyclerView) rootView.findViewById(R.id.forecast_list);
         listView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity().getApplicationContext());
@@ -59,7 +62,6 @@ public class TwelveDayFragment extends android.support.v4.app.Fragment {
         ForecastRecyclerViewAdapter adapter=new ForecastRecyclerViewAdapter(listItemObjectArrayList,getActivity().getApplicationContext());
         listView.setAdapter(adapter);
         fetchJsonData(requestQueue,url,listItemObjectArrayList,adapter);
-
 
         return rootView;
     }
@@ -90,6 +92,7 @@ public class TwelveDayFragment extends android.support.v4.app.Fragment {
                         recyclerViewItemObjectList.add(listItem);
                     }
                     adapter.notifyDataSetChanged();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getActivity().getApplicationContext(),
@@ -149,6 +152,7 @@ public class TwelveDayFragment extends android.support.v4.app.Fragment {
         sdf.setTimeZone(TimeZone.getTimeZone("GMT+4")); // give a timezone reference for formating (see comment at the bottom
         return sdf.format(date);
     }
+
    /* private class DownloadFilesTask extends AsyncTask<String, Integer, ArrayList<ListItemObject>> {
         protected ArrayList<ListItemObject> doInBackground(String... urls) {
             int count = urls.length;

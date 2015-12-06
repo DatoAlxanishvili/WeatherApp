@@ -6,11 +6,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:id="@+id/background_tab_one"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="assign3.weather.MainActivity$PlaceholderFragment"
-    android:background="@drawable/night"
+
     >
 
    <LinearLayout
@@ -25,14 +26,13 @@
            android:textSize="26sp"
            android:layout_marginTop="10dp"
            android:layout_gravity="center_horizontal"
-           android:text="egeg"
+
            />
        <ImageView
            android:layout_width="wrap_content"
            android:layout_height="90dp"
            android:id="@+id/weather_icon"
            android:layout_gravity="center_horizontal"
-           android:src="@drawable/w03d"
            android:layout_marginTop="10dp"
            />
        <assign3.weather.customViews.RobotoTextView
@@ -41,14 +41,12 @@
            android:id="@+id/temp"
            android:layout_gravity="center_horizontal"
            android:textSize="65sp"
-           android:text="gege"
            android:layout_marginTop="25dp"/>
        <assign3.weather.customViews.DejaVUSansTextView
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:id="@+id/temp_description"
            android:layout_gravity="center_horizontal"
-           android:text="gegege"
            android:textSize="17sp"
            android:layout_marginTop="5dp"/>
 

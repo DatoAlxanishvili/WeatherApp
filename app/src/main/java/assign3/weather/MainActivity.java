@@ -26,6 +26,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.readystatesoftware.systembartint.SystemBarTintManager;
+
 import java.sql.SQLOutput;
 
 import assign3.weather.customViews.DejaVUSansTextView;
@@ -55,17 +57,12 @@ public class MainActivity extends AppCompatActivity   {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerList;
-    private static Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context=this;
-
-        System.out.println("########### "+context.getResources().getIdentifier("w01d","drawable",context.getPackageName()));
-        System.out.println("###########* "+R.drawable.w01d);
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -254,10 +251,6 @@ public class MainActivity extends AppCompatActivity   {
         }
     }
 
-    public static Context getContext()
-    {
-        return context;
-    }
 
 
 }
