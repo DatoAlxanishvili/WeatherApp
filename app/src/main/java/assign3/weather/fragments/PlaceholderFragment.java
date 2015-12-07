@@ -147,20 +147,26 @@ public class PlaceholderFragment extends Fragment {
             }
         } else {
             // Cache data not exist.
-            makeJsonObjectRequest(requestQueue, urlJsonObj, tempView, icon, conditionView,backgroundView);
+            refreshLayout.post(new Runnable() {
+                @Override public void run() {
+                    refreshLayout.setRefreshing(true);
+                }
+            });
+            makeJsonObjectRequest(requestQueue, urlJsonObj, tempView, icon, conditionView,backgroundView,refreshLayout);
             getWeekForecastJson(requestQueue, urlJsonWeekForecast, weekWeatherView);
         }
+        refreshLayout.setDistanceToTriggerSync(100);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             public void onRefresh() {
                 // refreshLayout.setRefreshing(true);
                 System.out.println("refresh");
-                makeJsonObjectRequest(requestQueue, urlJsonObj, tempView, icon, conditionView,backgroundView);
+                makeJsonObjectRequest(requestQueue, urlJsonObj, tempView, icon, conditionView,backgroundView,refreshLayout);
                 if (isInternetAvailable()) {
                     weekWeatherView.removeAllViews();
                     getWeekForecastJson(requestQueue, urlJsonWeekForecast, weekWeatherView);
                 }
 
-                refreshLayout.setRefreshing(false);
+                //refreshLayout.setRefreshing(false);
             }
         });
 
@@ -172,9 +178,10 @@ public class PlaceholderFragment extends Fragment {
                                        final TextView tempView,
                                        final ImageView icon,
                                        final TextView conditionView,
-                                       final ViewPager backgroundView
+                                       final ViewPager backgroundView,
+                                       final SwipeRefreshLayout refreshLayout
     ) {
-        showpDialog();
+        //showpDialog();
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 urlJsonObj, null, new Response.Listener<JSONObject>() {
@@ -184,7 +191,8 @@ public class PlaceholderFragment extends Fragment {
                 Log.d(TAG, response.toString());
 
                 setData(response, tempView, icon, conditionView,backgroundView);
-                hidepDialog();
+                refreshLayout.setRefreshing(false);
+                //hidepDialog();
 
             }
         }, new Response.ErrorListener() {
@@ -195,7 +203,8 @@ public class PlaceholderFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(),
                         "საჭიროა ინტენეტთან კავშირი", Toast.LENGTH_SHORT).show();
                 // hide the progress dialog
-                hidepDialog();
+                //hidepDialog();
+                refreshLayout.setRefreshing(false);
 
             }
         });
@@ -241,7 +250,11 @@ public class PlaceholderFragment extends Fragment {
             JSONObject sys = response.getJSONObject("sys");
             tempView.setText(Math.round(temp) + "\u00ba");
             conditionView.setText(convertTime(date) + ", ");
+
             setBackground(weatherIcon.substring(0,2),backgroundView,conditionView);
+            if(weatherIcon.charAt(2)=='n'){
+                backgroundView.setBackgroundResource(R.drawable.night);
+            }
             /*pressureView.setText(pressure + " hpa");
             humidityView.setText(humidity + "%");
             windView.setText(windSpeed + " m/s");
@@ -356,7 +369,7 @@ public class PlaceholderFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(),
                         "საჭიროა ინტენეტთან კავშირი", Toast.LENGTH_SHORT).show();
                 // hide the progress dialog
-                hidepDialog();
+
 
             }
         });
