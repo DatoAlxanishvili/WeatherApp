@@ -5,6 +5,7 @@ package assign3.weather.fragments;
  */
 
 import android.app.ProgressDialog;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -12,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -147,13 +149,10 @@ public class PlaceholderFragment extends Fragment {
             }
         } else {
             // Cache data not exist.
-            refreshLayout.post(new Runnable() {
-                @Override public void run() {
-                    refreshLayout.setRefreshing(true);
-                }
-            });
+
             makeJsonObjectRequest(requestQueue, urlJsonObj, tempView, icon, conditionView,backgroundView,refreshLayout);
             getWeekForecastJson(requestQueue, urlJsonWeekForecast, weekWeatherView);
+
         }
         refreshLayout.setDistanceToTriggerSync(100);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -327,7 +326,7 @@ public class PlaceholderFragment extends Fragment {
             weekDay.setTextColor(getResources().getColor(R.color.white));
             weatherState.setPadding(0, 22, 0, 0);
             temperature.setPadding(0, 22, 0, 0);
-            weatherState.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 100));
+            weatherState.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, convertDptoPx(38)));
             weekDay.setText(weekDayArray.get(i));
             temperature.setText(tempArray.get(i) + "º");
             temperatureMin.setText(tempMinArray.get(i) + "º");
@@ -347,6 +346,16 @@ public class PlaceholderFragment extends Fragment {
             root.addView(element, i);
         }
 
+    }
+
+    private int convertDptoPx(int dp){
+        Resources r = getActivity().getApplicationContext().getResources();
+        int px = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp,
+                r.getDisplayMetrics()
+        );
+        return px;
     }
 
     private void getWeekForecastJson(RequestQueue requestQueue, String url, final LinearLayout root) {
@@ -434,11 +443,11 @@ public class PlaceholderFragment extends Fragment {
         switch (weatherCondition) {
             case "01":
                 backgroundView.setBackgroundResource(R.drawable.sunny);
-                conditionView.append("მზიანი");
+                conditionView.append("მოწმენდილი");
                 break;
             case "02":
                 backgroundView.setBackgroundResource(R.drawable.mostly_sunny);
-                conditionView.append("უემტესად მზიანი");
+                conditionView.append("მცირე ღრუბლიანობა");
                 break;
             case "03":
                 backgroundView.setBackgroundResource(R.drawable.cloudy);
@@ -462,22 +471,22 @@ public class PlaceholderFragment extends Fragment {
                 break;
             case "13":
                 backgroundView.setBackgroundResource(R.drawable.snow);
+                conditionView.append("თოვლი");
                 break;
             case "50":
                 backgroundView.setBackgroundResource(R.drawable.mist);
-                conditionView.append("თოვლი");
+                conditionView.append("ნისლი");
                 break;
             default:
                 backgroundView.setBackgroundResource(R.drawable.sunny);
-                conditionView.append("ნისლი");
                 break;
         }
         SimpleDateFormat sdf = new SimpleDateFormat("HH");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT+4"));
         int currentTime=Integer.parseInt(sdf.format(new Date(System.currentTimeMillis())));
 
-        if (currentTime>=19 || currentTime<=8){
+        /*if (currentTime>=19 || currentTime<=8){
             backgroundView.setBackgroundResource(R.drawable.night);
-        }
+        }*/
     }
 }

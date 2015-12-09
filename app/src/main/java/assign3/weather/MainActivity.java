@@ -53,7 +53,9 @@ public class MainActivity extends AppCompatActivity   {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private String[] cityTitles={"თბილისი","ბათუმი","ქუთაისი","თელავი","ზუგდიდი"};
+    private String[] cityTitles={"თბილისი","ბათუმი","ქუთაისი",
+            "თელავი","ზუგდიდი","გორი","მცხეთა","ახალციხე","ბორჯომი","ბაკურიანი",
+    "კასპი","ხაშური","მარნეული","ფოთი","სენაკი","ზესტაფონი","ქობულეთი"};
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerList;
@@ -139,6 +141,54 @@ public class MainActivity extends AppCompatActivity   {
                        break;
                    case 4:
                        bundle.putString("name", "zugdidi");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 5:
+                       bundle.putString("name", "gori");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 6:
+                       bundle.putString("name", "mtskheta");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 7:
+                       bundle.putString("name", "akhaltsikhe");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 8:
+                       bundle.putString("name", "borjomi");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 9:
+                       bundle.putString("name", "bakuriani");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 10:
+                       bundle.putString("name", "kaspi");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 11:
+                       bundle.putString("name", "khashuri");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 12:
+                       bundle.putString("name", "marneuli");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 13:
+                       bundle.putString("name", "poti");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 14:
+                       bundle.putString("name", "senaki");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 15:
+                       bundle.putString("name", "zestaponi");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 16:
+                       bundle.putString("name", "kobuleti");
                        bundle.putString("cityName",cityTitles[position]);
                        break;
                }

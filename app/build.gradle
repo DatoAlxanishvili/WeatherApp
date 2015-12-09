@@ -5,8 +5,8 @@ android {
     buildToolsVersion '23.0.1'
 
     defaultConfig {
-        applicationId "assign3.weather"
-        minSdkVersion 19
+        applicationId "ge.geolab.weather"
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"

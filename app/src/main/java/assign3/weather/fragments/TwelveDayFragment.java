@@ -87,12 +87,13 @@ public class TwelveDayFragment extends android.support.v4.app.Fragment {
             }
         } else {
             // Cache data not exist.
-            refreshLayout.post(new Runnable() {
+           /* refreshLayout.post(new Runnable() {
                 @Override public void run() {
                     refreshLayout.setRefreshing(true);
                 }
-            });
+            });*/
             fetchJsonData(requestQueue,url,listItemObjectArrayList,adapter,refreshLayout);
+            //refreshLayout.setRefreshing(false);
         }
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             public void onRefresh() {
@@ -140,6 +141,7 @@ public class TwelveDayFragment extends android.support.v4.app.Fragment {
                          final ArrayList<ListItemObject> recyclerViewItemObjectList,
                           final ForecastRecyclerViewAdapter adapter,
                           final SwipeRefreshLayout refreshLayout){
+        recyclerViewItemObjectList.clear();
         try {
             JSONArray list = response.getJSONArray("list");
             for (int i = 0; i < list.length(); i++) {
