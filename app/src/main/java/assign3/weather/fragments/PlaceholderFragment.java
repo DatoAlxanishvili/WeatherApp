@@ -112,8 +112,8 @@ public class PlaceholderFragment extends Fragment {
         String city = getArguments().getString("name");
         System.out.println(city);
 
-        final String urlJsonObj = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=2de143494c0b295cca9337e1e96b00e0&units=metric";
-        final String urlJsonWeekForecast = "http://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + "&appid=2de143494c0b295cca9337e1e96b00e0&units=metric&cnt=7";
+        final String urlJsonObj = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=81a98ab23d462997c65be8c8074ccc44&units=metric";
+        final String urlJsonWeekForecast = "http://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + "&appid=81a98ab23d462997c65be8c8074ccc44&units=metric&cnt=7";
         final RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
 
             /*
@@ -436,7 +436,7 @@ public class PlaceholderFragment extends Fragment {
 
 
         }
-        return null;
+        return "";
     }
 
     private void setBackground(String weatherCondition, ViewPager backgroundView,TextView conditionView) {

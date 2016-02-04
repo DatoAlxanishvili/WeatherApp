@@ -55,7 +55,11 @@ public class MainActivity extends AppCompatActivity   {
     private ViewPager mViewPager;
     private String[] cityTitles={"თბილისი","ბათუმი","ქუთაისი",
             "თელავი","ზუგდიდი","გორი","მცხეთა","ახალციხე","ბორჯომი","ბაკურიანი",
-    "კასპი","ხაშური","მარნეული","ფოთი","სენაკი","ზესტაფონი","ქობულეთი"};
+    "კასპი","ხაშური","მარნეული","ფოთი","სენაკი","ზესტაფონი","ქობულეთი","რუსთავი","გურჯაანი","საგარეჯო","ყვარელი","ლაგოდეხი",
+            "წინანდალი","ახმეტა","თიანეთი","ჟინვალი","ფასანაური","ახალგორი","ცხინვალი","მანგლისი","წალკა","ბოლნისი","გარდაბანი",
+    "სურამი","წაღვერი","ასპინძა","ნინოწმინდა","ახალქალაქი","აბასთუმანი","ადიგენი","ხარაგაული","ტყიბული","ონი","ამბროლაური","წყალტუბო",
+    "ხონი","ვანი","სამტრედია","აბაშა","ხობი","წალენჯიხა","ლენტეხი","მესტია","ურეკი","მახინჯაური","გალი","ოჩამჩირე","ტყვარჩელი","სოხუმი",
+    "ბიჭვინთა"};
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerList;
@@ -121,7 +125,7 @@ public class MainActivity extends AppCompatActivity   {
            @Override
            public void onItemClick(AdapterView parent, View view, int position, long id) {
                mDrawerList.setItemChecked(position, true);
-               mDrawerLayout.closeDrawer(mDrawerList);
+               mDrawerLayout.closeDrawers();
                switch (position){
                    case 0:
                        bundle.putString("name", "tbilisi");
@@ -189,6 +193,178 @@ public class MainActivity extends AppCompatActivity   {
                        break;
                    case 16:
                        bundle.putString("name", "kobuleti");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 17:
+                       bundle.putString("name", "rustavi");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 18:
+                       bundle.putString("name", "gurjaani");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 19:
+                       bundle.putString("name", "sagarejo");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 20:
+                       bundle.putString("name", "qvareli");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 21:
+                       bundle.putString("name", "lagodekhi");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 22:
+                       bundle.putString("name", "tsinandali");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 23:
+                       bundle.putString("name", "akhmeta");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 24:
+                       bundle.putString("name", "tianeti");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 25:
+                       bundle.putString("name", "zhinvali");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 26:
+                       bundle.putString("name", "pasanauri");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 27:
+                       bundle.putString("name", "akhalgori");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 28:
+                       bundle.putString("name", "tskhinvali");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 29:
+                       bundle.putString("name", "manglisi");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 30:
+                       bundle.putString("name", "tsalka");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 31:
+                       bundle.putString("name", "bolnisi");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 32:
+                       bundle.putString("name", "gardabani");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 33:
+                       bundle.putString("name", "surami");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 34:
+                       bundle.putString("name", "tsaghveri");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 35:
+                       bundle.putString("name", "aspindza");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 36:
+                       bundle.putString("name", "ninotsminda");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 37:
+                       bundle.putString("name", "akhalkalaki");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 38:
+                       bundle.putString("name", "abastumani");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 39:
+                       bundle.putString("name", "adigeni");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 40:
+                       bundle.putString("name", "kharagauli");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 41:
+                       bundle.putString("name", "tqibuli");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 42:
+                       bundle.putString("name", "oni");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 43:
+                       bundle.putString("name", "ambrolauri");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 44:
+                       bundle.putString("name", "tsqaltubo");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 45:
+                       bundle.putString("name", "khoni");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 46:
+                       bundle.putString("name", "vani");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 47:
+                       bundle.putString("name", "samtredia");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 48:
+                       bundle.putString("name", "abasha");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 49:
+                       bundle.putString("name", "khobi");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 50:
+                       bundle.putString("name", "tsalenjikha");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 51:
+                       bundle.putString("name", "lentekhi");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 52:
+                       bundle.putString("name", "mestia");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 53:
+                       bundle.putString("name", "ureki");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 54:
+                       bundle.putString("name", "makhinjauri");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 55:
+                       bundle.putString("name", "gali");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 56:
+                       bundle.putString("name", "ochamchire");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 57:
+                       bundle.putString("name", "tqvarcheli");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 58:
+                       bundle.putString("name", "sokhumi");
+                       bundle.putString("cityName",cityTitles[position]);
+                       break;
+                   case 59:
+                       bundle.putString("name", "bichvinta");
                        bundle.putString("cityName",cityTitles[position]);
                        break;
                }

@@ -60,7 +60,7 @@ public class TwelveDayFragment extends android.support.v4.app.Fragment {
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity().getApplicationContext());
         listView.setLayoutManager(linearLayoutManager);
         String city = getArguments().getString("name");
-        final String url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + "&appid=2de143494c0b295cca9337e1e96b00e0&units=metric&cnt=14";
+        final String url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + "&appid=81a98ab23d462997c65be8c8074ccc44&units=metric&cnt=14";
         final RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         final ArrayList<ListItemObject> listItemObjectArrayList=new ArrayList<>();
         final ForecastRecyclerViewAdapter adapter=new ForecastRecyclerViewAdapter(listItemObjectArrayList,getActivity().getApplicationContext());
